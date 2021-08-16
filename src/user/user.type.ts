@@ -1,3 +1,4 @@
+import { type } from "os"
 
 export type Login = {
   email: string;
@@ -22,3 +23,4 @@ export type LoginUserInfo = {
   name: string;
   lastLogin: Date;
 }
+

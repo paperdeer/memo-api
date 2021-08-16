@@ -1,15 +1,14 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, Param } from '@nestjs/common';
 
 import { User } from '../entities/user.entity';
 import { Login, UserInfo, LoginUserInfo, Register } from './user.type';
-import { UserRepository } from './user.repository';
 import * as Bcrypt from 'bcryptjs';
 import { Token } from 'src/util/token.util';
-
+import { UserRepository } from './user.repository';
 @Injectable()
 export class UserService {
-  constructor(private readonly userRepository: UserRepository){}
-
+  constructor(private readonly userRepository: UserRepository){this.userRepository = userRepository}
+  
   public async addUser(register: Register): Promise<UserInfo>{
     const registerUser = await this.userRepository.create();
 
@@ -21,8 +20,8 @@ export class UserService {
     registerUser.name = register.name;
     registerUser.uuid = Token.getUUID();
     registerUser.password = password;
-    
     const user = await this.userRepository.save(registerUser);
+    
     const userInfo: UserInfo = {
       email: user.email,
       name: user.name,
@@ -58,4 +57,18 @@ export class UserService {
     };
     return userInfo;
   }
+  // public async postMemo(memoContent : memoContent){
+  //   const memoInfo = {
+  //     title : memoContent.title,
+  //     content : memoContent.content
+  //   }
+  //   return memoInfo;
+  // }
+  // public async getMemo(memoContent : memoContent){
+  //   const memeInfo = {
+  //     title : memoContent.title,
+  //     content : memoContent.content
+  //   }
+  //   return memeInfo;
+  // }
 }
